@@ -6,6 +6,8 @@ from rest_framework.parsers import MultiPartParser, FormParser
 from django.shortcuts import get_object_or_404
 from .models import Project
 from .serializers import ProjectSerializer
+from django.http import HttpResponse
+from .utils import create_project_pdf
 
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
@@ -53,3 +55,22 @@ def project_delete(request, pk):
     project = get_object_or_404(Project, pk=pk, user=request.user)
     project.delete()
     return Response({"detail": "Project deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
+
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def export_project_pdf(request, pk):
+    """Export project details as PDF"""
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+    
+    try:
+        pdf = create_project_pdf(project)
+        
+        response = HttpResponse(pdf, content_type='application/pdf')
+        response['Content-Disposition'] = f'attachment; filename="project_{project.id}.pdf"'
+        
+        return response
+    except Exception as e:
+        return Response(
+            {"error": "Failed to generate PDF"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR
+        )
