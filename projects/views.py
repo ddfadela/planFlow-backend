@@ -26,6 +26,14 @@ def project_create(request):
         return Response(serializer.data, status=status.HTTP_201_CREATED)
     return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
 
+@api_view(['GET'])
+@permission_classes([IsAuthenticated])
+def project_detail(request, pk):
+    """Retrieve a project by its ID"""
+    project = get_object_or_404(Project, pk=pk, user=request.user)
+    serializer = ProjectSerializer(project)
+    return Response(serializer.data)
+
 @api_view(['PUT'])
 @permission_classes([IsAuthenticated])
 @parser_classes([MultiPartParser, FormParser])
@@ -44,4 +52,4 @@ def project_delete(request, pk):
     """Delete a project"""
     project = get_object_or_404(Project, pk=pk, user=request.user)
     project.delete()
-    return Response(status=status.HTTP_204_NO_CONTENT)
+    return Response({"detail": "Project deleted successfully."}, status=status.HTTP_204_NO_CONTENT)
