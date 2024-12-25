@@ -34,11 +34,13 @@ class ProjectSerializer(serializers.ModelSerializer):
             ProjectImage.objects.create(
                 project=project,
                 image=image1,
+                position=0 
             )
         if image2:
             ProjectImage.objects.create(
                 project=project,
                 image=image2,
+                position=1 
             )
         return project
 
@@ -53,16 +55,17 @@ class ProjectSerializer(serializers.ModelSerializer):
         
         # Update images
         if image1:
-            ProjectImage.objects.filter(project=instance).delete()
+            ProjectImage.objects.filter(project=instance, position=0).delete()
             ProjectImage.objects.create(
                 project=instance,
                 image=image1,
+                position=0
             )
         if image2:
-            ProjectImage.objects.filter(project=instance).delete()
+            ProjectImage.objects.filter(project=instance, position=1).delete()
             ProjectImage.objects.create(
                 project=instance,
                 image=image2,
-                is_primary=False
+                position=1
             )
         return instance
