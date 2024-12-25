@@ -5,3 +5,5 @@ staticfiles/
 static/
 
 *.env
+
+*venv
