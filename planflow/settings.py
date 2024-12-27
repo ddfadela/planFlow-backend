@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-&l=_7c_bna7j@&4i1wznai*58x^l^h8!t8=h3k^2yc6q@47_p8
 DEBUG = True
 APPEND_SLASH = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 # Application definition
@@ -138,6 +138,7 @@ REST_FRAMEWORK = {
 }
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
+    "https://plan-flow-frontend.vercel.app"
 ]
 
 MEDIA_URL = '/media/'
